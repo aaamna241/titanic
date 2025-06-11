@@ -3,7 +3,7 @@
 """
 
 from src.titanic.data import load_data, clean_data, prepare_data
-from src.titanic.registry import save_model
+from src.titanic.registry import save_model, load_model
 from src.titanic.train import train_model, evaluate_model, optimize_model
 # for train dataset
 df = load_data("train.csv")
@@ -26,3 +26,5 @@ model = optimize_model(model, train)
 score = evaluate_model(model, test)
 print(f"Optimized model score: {score}")
 # Save the model
+save_model(model, "models")
+print(load_model("models"))
