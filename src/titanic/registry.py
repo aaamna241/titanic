@@ -11,9 +11,9 @@ def save_model(model, path: str):
         model: The model to save.
         path (str): The file path where the model will be saved.
     """
-    if not os.path.exists(path):
-        os.makedirs(path)
-    with open(f"{path}/best_logistic_model.pkl", "wb") as f:
+    if not os.path.exists('models'):
+        os.makedirs('models')
+    with open(f"models/{path}.pkl", "wb") as f:
         pickle.dump(model, f)
    
 
@@ -29,6 +29,6 @@ def load_model(path: str):
     Returns:
         The loaded model.
     """
-    with open(f"{path}/best_logistic_model.pkl", "rb") as f:
+    with open(f"models/{path}.pkl", "rb") as f:
         model = pickle.load(f)
     return model

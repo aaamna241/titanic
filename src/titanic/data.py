@@ -6,6 +6,7 @@ import pandas as pd
 import os
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from src.titanic.registry import save_model
 
 DATA_DIR = "data/"
 
@@ -68,11 +69,13 @@ def prepare_data(df:pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
     scaler = StandardScaler()
     df_scaled = df.copy()
     df_scaled[numeric_features] = scaler.fit_transform(df[numeric_features])
+    save_model(scaler, 'preprocessor_numeric')
 
     # Categorical features
     categorical_features =  ["Sex", "Embarked"]
     encoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore', drop='first').set_output(transform="pandas")
     df_encoded = encoder.fit_transform(df[categorical_features])
+    save_model(encoder, 'preprocessor_categorical')
 
     train_df_final = pd.concat([df_scaled, df_encoded], axis=1).drop(columns=['Sex', 'Embarked'])
 

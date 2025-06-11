@@ -24,8 +24,8 @@ def main():
     print(f"Optimized model score: {evaluate_model(optimized_model, test)}")
 
     # Save and reload model
-    save_model(optimized_model, "models")
-    load_model("models")
+    save_model(optimized_model, "best_logistic_model")
+    print(load_model("best_logistic_model"))
 
 if __name__ == "__main__":
     main()
