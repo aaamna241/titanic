@@ -9,15 +9,25 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
 DATA_DIR = "data/"
 
-def load_data():
+def load_data(filename,is_test=False):
     """
     Load the Titanic dataset from a CSV file.
     
     Returns:
         DataFrame: The loaded Titanic dataset.
     """
-    return pd.read_csv(os.path.join(DATA_DIR, "train.csv"),index_col=0)
-       
+    df= pd.read_csv(os.path.join(DATA_DIR, filename),index_col=0)
+    if is_test:
+        target_test_df= pd.read_csv(os.path.join(DATA_DIR,"gender_submission.csv"),index_col=0)
+        df = pd.merge(  df
+                   , target_test_df
+                   , left_index=True
+                   , right_index=True
+                   , how='left'
+                   , suffixes=('', '_target')).copy()
+
+    return df   
+
 def clean_data(df):
     """
     clean the Titanic dataset.
@@ -38,6 +48,7 @@ def clean_data(df):
 
     # fill NA Embarked
     df["Embarked"].fillna("S", inplace=True)
+    df.dropna(subset=['Fare'], inplace=True)
     
     return df
 
