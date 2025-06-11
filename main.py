@@ -21,3 +21,8 @@ print(test)
 model= train_model(train)
 score = evaluate_model(model, test)
 print(f"Model score: {score}")
+# Optimize the model
+model = optimize_model(model, train)
+score = evaluate_model(model, test)
+print(f"Optimized model score: {score}")
+# Save the model
