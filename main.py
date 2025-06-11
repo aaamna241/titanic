@@ -5,26 +5,27 @@
 from src.titanic.data import load_data, clean_data, prepare_data
 from src.titanic.registry import save_model, load_model
 from src.titanic.train import train_model, evaluate_model, optimize_model
-# for train dataset
-df = load_data("train.csv")
-clean_df = clean_data(df)
-train = prepare_data(clean_df)
-# for test dataset
-df_test = load_data("test.csv", is_test=True)
-clean_df_test = clean_data(df_test)
-test = prepare_data(clean_df_test)
 
-print(train)
-print(test)
+def process_dataset(file_path, is_test=False):
+    df = load_data(file_path, is_test=is_test)
+    clean_df = clean_data(df)
+    return prepare_data(clean_df)
 
-# Train the model
-model= train_model(train)
-score = evaluate_model(model, test)
-print(f"Model score: {score}")
-# Optimize the model
-model = optimize_model(model, train)
-score = evaluate_model(model, test)
-print(f"Optimized model score: {score}")
-# Save the model
-save_model(model, "models")
-print(load_model("models"))
+def main():
+    train = process_dataset("train.csv")
+    test = process_dataset("test.csv", is_test=True)
+
+    # Train and evaluate model
+    model = train_model(train)
+    print(f"Model score: {evaluate_model(model, test)}")
+
+    # Optimize and re-evaluate
+    optimized_model = optimize_model(model, train)
+    print(f"Optimized model score: {evaluate_model(optimized_model, test)}")
+
+    # Save and reload model
+    save_model(optimized_model, "models")
+    load_model("models")
+
+if __name__ == "__main__":
+    main()
